@@ -1,0 +1,9 @@
+# 開發文件：僅保留於本機，不公開至 GitHub
+SPEC.md
+QUESTIONS.md
+CLAUDE.md
+
+# 作業系統產生的雜項檔案
+Thumbs.db
+desktop.ini
+.DS_Store

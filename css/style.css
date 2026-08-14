@@ -1,0 +1,339 @@
+/* ============================================================
+   Icebreaker — 樣式表
+   設計原則：行動優先、大字、大按鈕、單手可操作、溫暖不幼稚
+   ============================================================ */
+
+/* ---------- 設計變數 ---------- */
+:root {
+  /* 暖色系底色，避免純白帶來的表單感 */
+  --bg: #fdf6ee;
+  --surface: #fffdfa;
+  --ink: #3b2f2a;
+  --ink-soft: #7a6a60;
+  --line: rgba(59, 47, 42, 0.10);
+  --accent: #e2704a;
+
+  /* 五個層級各自的主色，由淺到深呼應聊天深度 */
+  --lv1: #e0a83c;
+  --lv2: #e08a53;
+  --lv3: #d96a4f;
+  --lv4: #c05a72;
+  --lv5: #8f5f9e;
+  /* 互動卡使用另一個色系，讓使用者一眼看出「這張不是問題」 */
+  --interaction: #3f8f7d;
+
+  --radius: 20px;
+  --shadow: 0 6px 24px rgba(59, 47, 42, 0.08);
+
+  /* iOS safe-area：搭配 index.html 的 viewport-fit=cover 使用 */
+  --pad-top: max(24px, env(safe-area-inset-top));
+  --pad-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+/* ---------- 基礎重置 ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* 防止任何元素撐出畫面造成水平捲動 */
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  /* 避免 iOS 橫置時自動放大字級 */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- 畫面切換 ---------- */
+.view {
+  display: none;
+  /* dvh 讓行動瀏覽器網址列收合時高度不跳動；不支援時退回 vh */
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--pad-top) 24px var(--pad-bottom);
+}
+
+.view--active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   首頁
+   ============================================================ */
+.home__header {
+  padding: 8px 0 28px;
+}
+
+.home__eyebrow {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.home__title {
+  margin: 0 0 10px;
+  font-size: 34px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.home__lead {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
+.levels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 層級按鈕：整塊可點，觸控區域遠大於 44px 最低建議值 */
+.level {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--level-color, var(--accent));
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 只用 :active 而不倚賴 :hover，確保觸控裝置也有回饋 */
+.level:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 10px rgba(59, 47, 42, 0.10);
+}
+
+.level__num {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--level-color, var(--accent));
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.level__text {
+  min-width: 0;
+}
+
+.level__name {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.level__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.btn--random {
+  margin-top: 20px;
+}
+
+.home__footnote {
+  margin: auto 0 0;
+  padding-top: 28px;
+  font-size: 13px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ============================================================
+   抽卡頁
+   ============================================================ */
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.btn-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.btn-icon:active {
+  background: #f3e9df;
+}
+
+.card-top__level {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--level-color, var(--accent));
+}
+
+/* 卡片本體：置中並佔滿剩餘空間，讓題目落在拇指容易閱讀的高度 */
+.card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 26px;
+  border: 1px solid var(--line);
+  border-top: 6px solid var(--level-color, var(--accent));
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.card__type {
+  margin: 0 0 18px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--level-color, var(--accent));
+}
+
+.card__question {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.65;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  /* 中文長句在窄螢幕的斷行品質 */
+  word-break: break-word;
+}
+
+/* 抽下一題時由 JS 重新掛上這個 class 觸發動畫 */
+.card--enter {
+  animation: card-enter 0.22s ease-out;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card-hint {
+  margin: 18px 4px 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- 按鈕 ---------- */
+.btn {
+  width: 100%;
+  min-height: 56px;
+  padding: 16px 20px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn--primary {
+  background: var(--level-color, var(--accent));
+  color: #fff;
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink-soft);
+}
+
+/* ---------- 鍵盤可及性 ---------- */
+.level:focus-visible,
+.btn:focus-visible,
+.btn-icon:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- 大螢幕微調 ---------- */
+@media (min-width: 640px) {
+  .home__title {
+    font-size: 40px;
+  }
+
+  .card__question {
+    font-size: 28px;
+  }
+
+  .actions {
+    flex-direction: row-reverse;
+  }
+}
+
+/* ---------- 尊重系統的減少動態偏好 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

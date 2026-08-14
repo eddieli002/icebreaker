@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport-fit=cover 搭配 CSS 的 safe-area-inset，避免 iPhone 瀏海與底部橫條遮住內容 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="給兩個人使用的手機版破冰聊天遊戲，選一個聊天深度就能開始。">
+  <meta name="theme-color" content="#fdf6ee">
+  <title>Icebreaker — 今天想聊多深？</title>
+  <!-- 相對路徑：確保部署在 GitHub Pages 專案子路徑下仍能正確載入 -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== 首頁：選擇聊天層級 ===== -->
+  <main id="view-home" class="view view--active" aria-labelledby="home-title">
+    <header class="home__header">
+      <p class="home__eyebrow">Icebreaker</p>
+      <h1 id="home-title" class="home__title">今天想聊多深？</h1>
+      <p class="home__lead">選一個深度，然後輪流回答就好。</p>
+    </header>
+
+    <!--
+      層級按鈕由 js/app.js 依 data/questions.js 動態產生，
+      避免題庫層級異動時要同時改 HTML 與 JS 兩處。
+    -->
+    <nav class="levels" id="level-list" aria-label="選擇聊天層級"></nav>
+
+    <button type="button" class="btn btn--ghost btn--random" id="btn-random">
+      🎲 隨便抽一張
+    </button>
+
+    <p class="home__footnote">不需要註冊，資料不會離開這個裝置。</p>
+  </main>
+
+  <!-- ===== 抽卡頁：顯示題目卡 ===== -->
+  <main id="view-card" class="view" aria-labelledby="card-question" hidden>
+    <header class="card-top">
+      <button type="button" class="btn-icon" id="btn-home" aria-label="回首頁">
+        <span aria-hidden="true">←</span>
+      </button>
+      <p class="card-top__level" id="card-level"></p>
+    </header>
+
+    <!--
+      aria-live="polite"：抽下一題時讓螢幕閱讀器朗讀新題目，
+      而不需要使用者自行重新聚焦。
+    -->
+    <section class="card" id="card" aria-live="polite">
+      <p class="card__type" id="card-type"></p>
+      <p class="card__question" id="card-question"></p>
+    </section>
+
+    <p class="card-hint">任何問題都可以跳過，不需要解釋原因。</p>
+
+    <div class="actions">
+      <button type="button" class="btn btn--primary" id="btn-next">下一題</button>
+      <button type="button" class="btn btn--ghost" id="btn-switch">換個層級</button>
+    </div>
+  </main>
+
+  <script src="data/questions.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
