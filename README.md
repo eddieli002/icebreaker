@@ -30,10 +30,8 @@ icebreaker/
 │   └── app.js          # 抽卡邏輯、防重複、畫面切換
 ├── data/
 │   └── questions.js    # 題庫資料（掛載於 window.ICEBREAKER_DATA）
+├── .gitignore          # 排除僅保留於本機的開發文件
 ├── .nojekyll           # 讓 GitHub Pages 略過 Jekyll 處理
-├── SPEC.md             # 產品功能與技術規格
-├── QUESTIONS.md        # 題庫原文與題目設計原則
-├── CLAUDE.md           # 給 Claude Code 的開發規則
 └── README.md           # 本文件
 ```
 
@@ -107,7 +105,7 @@ git push -u origin main
 | --- | --- |
 | 5 個 Level，各 20 題 | 通過 |
 | 互動卡 15 張 | 通過 |
-| 題目文字與 `QUESTIONS.md` 逐字一致 | 通過 |
+| 題目文字與原始題庫逐字一致 | 通過 |
 | 連抽 400 次無立即重複 | 通過 |
 | 一輪 20 題內無重複，抽完自動重新洗牌 | 通過 |
 | 不會連續出現兩張互動卡 | 通過 |
@@ -132,7 +130,7 @@ git push -u origin main
 
 編輯 `data/questions.js` 即可，不需要任何建置步驟。
 
-新增題目時請遵守 `QUESTIONS.md` 末段的「題目設計規則」：
+新增題目時請遵守以下題目設計規則：
 
 - 優先使用開放式問題
 - 不要像面試
