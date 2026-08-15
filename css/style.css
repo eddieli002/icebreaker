@@ -213,12 +213,21 @@ body {
   color: var(--level-color, var(--accent));
 }
 
-/* 卡片本體：置中並佔滿剩餘空間，讓題目落在拇指容易閱讀的高度 */
+/*
+  卡片高度依內容決定，不撐滿剩餘空間。
+
+  撐滿會讓短題目的周圍出現大片留白：手機直式螢幕高，卡片被拉到 600px 以上，
+  但實際內容往往只有 190px，加上文字靠左對齊，視覺上就像一小撮內容縮在左上角。
+
+  改成包住內容後還有一個副作用是好的：題目的垂直位置變成固定值。
+  card-top 高度、卡片內距、類型標籤都是定值，
+  因此不論題目長短、是問題卡或互動卡、延伸是否展開，題目都停在同一個高度——
+  展開延伸時卡片往下長，而不是把正在讀的題目往上推。
+*/
 .card {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   padding: 32px 26px;
   border: 1px solid var(--line);
   border-top: 6px solid var(--level-color, var(--accent));
@@ -317,8 +326,10 @@ body {
   }
 }
 
+/* margin-top: auto 吸收卡片以下的剩餘空間，把提示與「下一題」推到畫面底部 */
 .card-hint {
-  margin: 18px 4px 20px;
+  margin: auto 4px 20px;
+  padding-top: 18px;
   font-size: 13px;
   line-height: 1.6;
   text-align: center;
@@ -382,6 +393,46 @@ body {
 
   .followup__text {
     font-size: 21px;
+  }
+}
+
+/* ---------- 矮螢幕微調 ---------- */
+
+/*
+  iPhone SE（375×667）與更早的 320×568 這類矮螢幕，
+  在「最長題目 + 展開最長延伸」的最壞情況下會超出約 34px，
+  導致主要動作「下一題」要捲動才碰得到。
+  這裡只收緊間距與字級，不改變版面結構，一般高度的手機不受影響。
+*/
+@media (max-height: 700px) {
+  .card {
+    padding: 22px 20px;
+  }
+
+  .card__question {
+    font-size: 22px;
+  }
+
+  .card__type {
+    margin-bottom: 12px;
+  }
+
+  .followup {
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .followup__text {
+    font-size: 17px;
+  }
+
+  .followup-toggle {
+    margin-top: 16px;
+  }
+
+  .card-hint {
+    padding-top: 12px;
+    margin-bottom: 14px;
   }
 }
 
