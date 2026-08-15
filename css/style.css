@@ -322,10 +322,6 @@ body {
   .card__question {
     font-size: 28px;
   }
-
-  .actions {
-    flex-direction: row-reverse;
-  }
 }
 
 /* ---------- 尊重系統的減少動態偏好 ---------- */

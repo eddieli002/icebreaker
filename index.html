@@ -7,13 +7,22 @@
   <meta name="description" content="給兩個人使用的手機版破冰聊天遊戲，選一個聊天深度就能開始。">
   <meta name="theme-color" content="#fdf6ee">
   <title>Icebreaker — 今天想聊多深？</title>
+  <!--
+    以 data URI 內嵌 SVG 圖示，避免瀏覽器自動去要 /favicon.ico 而得到 404。
+    不另外放檔案，部署在任何子路徑下都不會失效。
+  -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23e2704a'/%3E%3Ccircle cx='12' cy='15' r='2.6' fill='%23fdf6ee'/%3E%3Ccircle cx='20' cy='15' r='2.6' fill='%23fdf6ee'/%3E%3Cpath d='M10 22h8l-2.5 3z' fill='%23fdf6ee'/%3E%3C/svg%3E">
   <!-- 相對路徑：確保部署在 GitHub Pages 專案子路徑下仍能正確載入 -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ===== 首頁：選擇聊天層級 ===== -->
-  <main id="view-home" class="view view--active" aria-labelledby="home-title">
+  <!--
+    ===== 首頁：選擇聊天層級 =====
+    tabindex="-1"：讓 JS 在切換畫面後能把焦點移進來。
+    舊畫面被 hidden 之後焦點會掉回 body，鍵盤使用者得從頭 Tab 一次。
+  -->
+  <main id="view-home" class="view view--active" tabindex="-1" aria-labelledby="home-title">
     <header class="home__header">
       <p class="home__eyebrow">Icebreaker</p>
       <h1 id="home-title" class="home__title">今天想聊多深？</h1>
@@ -36,7 +45,7 @@
   <!-- ===== 抽卡頁：顯示題目卡 ===== -->
   <main id="view-card" class="view" aria-labelledby="card-question" hidden>
     <header class="card-top">
-      <button type="button" class="btn-icon" id="btn-home" aria-label="回首頁">
+      <button type="button" class="btn-icon" id="btn-home" aria-label="回首頁換個層級">
         <span aria-hidden="true">←</span>
       </button>
       <p class="card-top__level" id="card-level"></p>
@@ -53,9 +62,12 @@
 
     <p class="card-hint">任何問題都可以跳過，不需要解釋原因。</p>
 
+    <!--
+      只留「下一題」一個動作。返回首頁改由左上角的 ← 與系統返回鍵負責，
+      原本的「換個層級」與 ← 目的地完全相同，屬於重複導航。
+    -->
     <div class="actions">
       <button type="button" class="btn btn--primary" id="btn-next">下一題</button>
-      <button type="button" class="btn btn--ghost" id="btn-switch">換個層級</button>
     </div>
   </main>
 

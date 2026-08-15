@@ -29,6 +29,7 @@
   var cardTypeEl = document.getElementById('card-type');
   var cardQuestionEl = document.getElementById('card-question');
   var cardLevelEl = document.getElementById('card-level');
+  var nextBtn = document.getElementById('btn-next');
 
   // ---------- 狀態 ----------
   var state = {
@@ -104,7 +105,65 @@
       view.hidden = !isTarget;
     });
     window.scrollTo(0, 0);
+
+    /*
+      舊畫面被 hidden 後，原本停在按鈕上的焦點會掉回 body，
+      鍵盤與讀螢幕使用者每次切換畫面都得重新 Tab 一輪。
+      因此主動把焦點移進新畫面：
+      - 抽卡頁交給「下一題」，使用者可以連續操作
+      - 首頁交給畫面容器本身（tabindex="-1"），
+        讀螢幕會依 aria-labelledby 朗讀標題，宣告「已經換頁了」
+      preventScroll 避免瀏覽器為了聚焦而把畫面捲走。
+    */
+    var focusTarget = target === cardView ? nextBtn : homeView;
+    if (focusTarget) {
+      focusTarget.focus({ preventScroll: true });
+    }
   }
+
+  // ---------- 瀏覽器歷史 ----------
+
+  /*
+    手機使用者在抽卡頁按系統返回鍵時，預期是回到首頁而不是離開整個網站。
+    做法是進入抽卡頁時推一筆歷史紀錄，但「不改動網址」——
+    這樣在 GitHub Pages 子路徑下不必處理 base path，重新整理也不會落到不存在的路徑。
+  */
+  var historyEnabled = false;
+
+  function pushCardState() {
+    if (!window.history || !window.history.pushState) return;
+    // 已經在抽卡頁的紀錄上就不再堆疊，否則返回鍵得按好幾次才回得到首頁
+    if (window.history.state && window.history.state.icebreaker === 'card') {
+      historyEnabled = true;
+      return;
+    }
+    try {
+      window.history.pushState({ icebreaker: 'card' }, '');
+      historyEnabled = true;
+    } catch (err) {
+      // file:// 協定下部分瀏覽器會擋 pushState，退回單純切換畫面即可
+      historyEnabled = false;
+    }
+  }
+
+  /** 統一的回首頁入口：有歷史紀錄就走 back()，避免按鈕與返回鍵各走一套而堆疊多餘紀錄 */
+  function goHome() {
+    if (historyEnabled) {
+      window.history.back();
+    } else {
+      showView(homeView);
+    }
+  }
+
+  window.addEventListener('popstate', function (event) {
+    var entry = event.state;
+    // 使用者按了「前進」而且先前確實開過牌局，就還原抽卡頁；其餘一律回首頁
+    if (entry && entry.icebreaker === 'card' && state.levelId !== null) {
+      showView(cardView);
+    } else {
+      showView(homeView);
+    }
+  });
 
   // ---------- 抽卡 ----------
 
@@ -140,9 +199,18 @@
 
     cardTypeEl.textContent = isInteraction ? '互動卡' : '問題卡';
     cardQuestionEl.textContent = text;
-    cardLevelEl.textContent = state.randomMode
-      ? '隨便抽一張 · ' + level.name
-      : 'Level ' + level.id + ' · ' + level.name;
+
+    /*
+      互動卡取自獨立的 interactionCards 牌堆，不屬於任何層級，
+      標成「Level 3 · 深入了解」會讓人誤以為它是該層級的題目，因此另外標示。
+    */
+    if (isInteraction) {
+      cardLevelEl.textContent = '互動卡 · 不分層級';
+    } else {
+      cardLevelEl.textContent = state.randomMode
+        ? '隨便抽一張 · ' + level.name
+        : 'Level ' + level.id + ' · ' + level.name;
+    }
 
     // 移除再強制重排後重新加上，animation 才會在同一元素上重播
     cardEl.classList.remove('card--enter');
@@ -156,6 +224,7 @@
     state.lastText = null;
     state.lastWasInteraction = false;
 
+    pushCardState();
     showView(cardView);
     drawCard();
   }
@@ -204,15 +273,9 @@
     startLevel(DATA.levels[0].id, true);
   });
 
-  document.getElementById('btn-next').addEventListener('click', drawCard);
+  nextBtn.addEventListener('click', drawCard);
 
-  document.getElementById('btn-switch').addEventListener('click', function () {
-    showView(homeView);
-  });
-
-  document.getElementById('btn-home').addEventListener('click', function () {
-    showView(homeView);
-  });
+  document.getElementById('btn-home').addEventListener('click', goHome);
 
   buildLevelButtons();
 })();
