@@ -35,8 +35,12 @@
     -->
     <nav class="levels" id="level-list" aria-label="選擇聊天層級"></nav>
 
+    <!--
+      「幫我選一題」：替還沒想好深度的人隨機挑一個層級。
+      挑定之後就固定在該層級，不會在遊玩途中自己跳深度。
+    -->
     <button type="button" class="btn btn--ghost btn--random" id="btn-random">
-      🎲 隨便抽一張
+      🎲 幫我選一題
     </button>
 
     <p class="home__footnote">不需要註冊，資料不會離開這個裝置。</p>
@@ -51,13 +55,31 @@
       <p class="card-top__level" id="card-level"></p>
     </header>
 
-    <!--
-      aria-live="polite"：抽下一題時讓螢幕閱讀器朗讀新題目，
-      而不需要使用者自行重新聚焦。
-    -->
-    <section class="card" id="card" aria-live="polite">
-      <p class="card__type" id="card-type"></p>
-      <p class="card__question" id="card-question"></p>
+    <section class="card" id="card">
+      <!--
+        aria-live="polite"：抽下一題或展開延伸時讓螢幕閱讀器朗讀新內容，
+        而不需要使用者自行重新聚焦。
+        只包住內容本身，不包延伸按鈕，避免按鈕文字變動也被朗讀一次。
+      -->
+      <div class="card__body" aria-live="polite">
+        <p class="card__type" id="card-type"></p>
+        <p class="card__question" id="card-question"></p>
+
+        <!-- 延伸建議：預設收合，使用者主動點擊才顯示 -->
+        <div class="followup" id="followup" hidden>
+          <p class="followup__label" id="followup-label"></p>
+          <p class="followup__text" id="followup-text"></p>
+        </div>
+      </div>
+
+      <!--
+        次要入口，刻意做成低調的文字按鈕而非主要按鈕：
+        聊開的人不需要它，卡住的人才會去找它。
+        互動卡沒有延伸內容，抽到互動卡時整顆按鈕會被隱藏。
+      -->
+      <button type="button" class="followup-toggle" id="btn-followup" aria-expanded="false" aria-controls="followup">
+        <span aria-hidden="true">💡</span> <span id="followup-btn-label">延伸一下</span>
+      </button>
     </section>
 
     <p class="card-hint">任何問題都可以跳過，不需要解釋原因。</p>
@@ -72,6 +94,7 @@
   </main>
 
   <script src="data/questions.js"></script>
+  <script src="data/interactions.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

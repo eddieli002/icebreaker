@@ -245,6 +245,62 @@ body {
   word-break: break-word;
 }
 
+/* ---------- 延伸聊天 ---------- */
+
+/*
+  延伸建議區：預設由 JS 以 hidden 收合，使用者點「延伸一下」才出現。
+  不設 display，讓 hidden 屬性的 UA 樣式能正常生效。
+*/
+.followup {
+  margin-top: 22px;
+  padding-top: 18px;
+  /* 虛線分隔：跟主題目有區隔，但不像另一張卡片那樣搶戲 */
+  border-top: 1px dashed var(--line);
+}
+
+.followup__label {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+
+/* 字級刻意小於主題目，維持「這是補充、不是新題目」的視覺層級 */
+.followup__text {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.65;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+/*
+  次要入口：做成低調的小 chip 而不是全寬按鈕。
+  聊開的人根本不需要看到它，卡住的人才會去找它。
+  仍維持 44px 高度，符合觸控最低建議值。
+*/
+.followup-toggle {
+  align-self: flex-start;
+  margin-top: 22px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.followup-toggle:active {
+  transform: scale(0.98);
+  background: #f3e9df;
+}
+
 /* 抽下一題時由 JS 重新掛上這個 class 觸發動畫 */
 .card--enter {
   animation: card-enter 0.22s ease-out;
@@ -308,7 +364,8 @@ body {
 /* ---------- 鍵盤可及性 ---------- */
 .level:focus-visible,
 .btn:focus-visible,
-.btn-icon:focus-visible {
+.btn-icon:focus-visible,
+.followup-toggle:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
@@ -321,6 +378,10 @@ body {
 
   .card__question {
     font-size: 28px;
+  }
+
+  .followup__text {
+    font-size: 21px;
   }
 }
 
